@@ -23,7 +23,6 @@ public class RegistrationUserController {
 
     @PostMapping("/registration")
     public String addUser(User user, Model model) {
-        System.out.println("hello " + user.getUsername());
         userRepo.findByUsername(user.getUsername());
         user.setActive(true);
         user.setRoles(Collections.singleton(Role.USER));

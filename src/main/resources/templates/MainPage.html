@@ -1,10 +1,108 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Responsive website template for developers</title>
+
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800'
+          rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
 </head>
 <body>
-hi sergey
+<!-- ******HEADER****** -->
+<header id="header" class="header">
+    <div class="container">
+        <h1 class="logo">
+            <a href="#hero">
+                <span class="logo-icon-wrapper"><img class="logo-icon" src="/images/logo-icon.svg" alt="icon"></span>
+            </a>
+        </h1><!--//logo-->
+        <nav class="main-nav navbar-right" role="navigation">
+            <div class="navbar-header">
+                <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button><!--//nav-toggle-->
+            </div><!--//navbar-header-->
+            <div id="navbar-collapse" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li class="active nav-item">
+                        <a href="#exampleModal" data-toggle="modal" data-target="#myModal">Modal</a>
+                    </li>
+                    <li class="nav-item"><a href="#testimonials">Testimonials</a></li>
+                    <li class="nav-item"><a href="#features">Features</a></li>
+                    <li class="nav-item"><a href="#team">Team</a></li>
+                    <li class="nav-item"><a href="#pricing">Pricing</a></li>
+                    <li class="nav-item"><a href="#contact">Contact</a></li>
+                    <li class="nav-item"><a>
+                        <form action="/logout" method="post">
+                            <input type="hidden" class="form-control" th:name="${_csrf.parameterName}"
+                                   th:value="${_csrf.token}"/>
+                            <input style="background: none;border: none" id="logoutBnt" type="submit" value="LogOut">
+                        </form>
+                    </a></li>
+                </ul><!--//nav-->
+            </div><!--//navabr-collapse-->
+        </nav><!--//main-nav-->
+    </div><!--//container-->
+</header><!--//header-->
+
+<div id="hero">
+    <div id="hero-carousel" class="hero-carousel carousel carousel-fade slide" data-ride="carousel">
+        <!-- Wrapper for slides -->
+        <div class="carousel-inner">
+            <div class="item item-1 active">
+                <div class="item-content container">
+                    <div class="item-content-inner">
+                        <h2 class="heading">AppKit is the perfect front-end <br class="hidden-xs">template for app
+                            developers</h2>
+                        <p class="intro">It helps developers to build beautiful and user-friendly web apps quickly and
+                            easily!</p>
+                    </div><!--//item-content-inner-->
+                </div><!--//item-content-->
+            </div><!--//item-->
+        </div><!--//carousel-->
+    </div><!--//hero-->
+</div>
+
+<div class="container">
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true"></span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="" method="post">
+                        <div class="form-group">
+                            <label class="col-form-label">Recipient:</label>
+                            <input type="text" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="col-form-label">Message:</label>
+                            <textarea class="form-control"></textarea>
+                        </div>
+                        <input type="hidden" class="form-control" th:name="${_csrf.parameterName}"
+                               th:value="${_csrf.token}"/>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Send message</button>
+                    </form>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
 </body>
 </html>
+

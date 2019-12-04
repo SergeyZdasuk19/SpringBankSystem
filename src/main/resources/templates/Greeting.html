@@ -1,11 +1,38 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Responsive website template for developers</title>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800'
+          rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link id="theme-style" rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-Hello
-<a href="/main">Main page</a>
+<!-- ******HEADER****** -->
+<header id="header" class="header">
+    <div class="container">
+        <h1 class="logo">
+            <a class="scrollto" href="#hero">
+                <span class="logo-icon-wrapper"><img class="logo-icon" src="/images/logo-icon.svg" alt="icon"></span>
+            </a>
+        </h1><!--//logo-->
+    </div><!--//container-->
+</header><!--//header-->
+
+<div id="hero">
+    <div id="hero-carousel" class="hero-carousel carousel carousel-fade slide" data-ride="carousel">
+        <!-- Wrapper for slides -->
+        <div class="carousel-inner">
+            <div class="item item-1 active">
+                <div class="item-content container">
+                    <div class="item-content-inner">
+                        <a class="btn btn-primary btn-cta buttonGetter" href="/main">Get Started</a>
+                    </div><!--//item-content-inner-->
+                </div><!--//item-content-->
+            </div><!--//item-->
+        </div><!--//carousel-->
+    </div><!--//hero-->
+</div>
 </body>
 </html>
+

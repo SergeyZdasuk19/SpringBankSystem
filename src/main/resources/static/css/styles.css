@@ -1,0 +1,199 @@
+/*
+ * Template Name: Appkit Landing - Responsive Website Template for Developers
+ * Version: 1.0
+ * Author: Xiaoying Riley
+ * Website: http://themes.3rdwavemedia.com/
+ * Twitter: @3rdwave_themes
+* License: Creative Commons Attribution 3.0 License
+*/
+/* Theme default */
+body {
+    font-family: 'Open Sans', arial, sans-serif;
+    color: #494d55;
+    font-size: 14px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+p {
+    margin-bottom: 15px;
+    line-height: 1.5;
+}
+
+a {
+    color: #3aa7aa;
+    -webkit-transition: all 0.4s ease-in-out;
+    -moz-transition: all 0.4s ease-in-out;
+    -ms-transition: all 0.4s ease-in-out;
+    -o-transition: all 0.4s ease-in-out;
+}
+
+a.btn-cta {
+    font-weight: bold;
+    font-size: 16px;
+    padding: 50px 15px;
+}
+.btn-primary {
+    background: #40babd;
+    border: 1px solid #40babd;
+    color: #fff;
+    border-top-left-radius: 150px;
+    border-top-right-radius: 150px;
+    border-bottom-left-radius: 150px;
+    border-bottom-right-radius: 150px;
+}
+
+.header {
+    position: fixed;
+    width: 100%;
+    z-index: 30;
+    height: 60px;
+    -webkit-transition: none;
+    -moz-transition: none;
+    -ms-transition: none;
+    -o-transition: none;
+}
+
+.header .logo {
+    margin: 0;
+    display: inline-block;
+    float: left;
+    font-size: 28px;
+    padding-top: 15px;
+}
+
+.main-nav {
+    margin-top: 6px;
+}
+
+.main-nav .navbar-toggle .icon-bar {
+    background-color: #fff;
+    height: 3px;
+}
+
+.main-nav .navbar-toggle:hover .icon-bar {
+    background-color: #fff;
+}
+
+.main-nav .nav .nav-item {
+    font-weight: normal;
+    font-size: 14px;
+    margin-right: 25px;
+}
+
+.main-nav .nav .nav-item.active a {
+    background: none;
+    color: #fff;
+}
+
+.main-nav .nav .nav-item a {
+    color: rgba(255, 255, 255, 0.65);
+    font-weight: 700;
+}
+
+.main-nav .nav .nav-item a:hover {
+    color: #fff;
+    background: none;
+}
+
+.main-nav .nav .nav-item a:focus {
+    outline: none;
+    background: none;
+}
+
+.main-nav .nav .nav-item a:active {
+    outline: none;
+    background: none;
+}
+
+.hero-carousel {
+    height: 10vh;
+    color: #fff;
+}
+
+.hero-carousel .carousel-inner .item {
+    height: 100vh;
+    background-position: center center;
+}
+
+.hero-carousel .carousel-inner .item-1 {
+    background-image: url('../images/hero-1.jpg');
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+.hero-carousel .carousel-inner .heading {
+    font-size: 30px;
+    line-height: 1.4;
+    font-weight: bold;
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+
+.hero-carousel .carousel-inner .intro {
+    font-size: 18px;
+}
+
+/* Small devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+    .feature-nav {
+        text-align: left;
+        padding-left: 30px;
+    }
+
+    .feature-nav > li {
+        font-size: 15px;
+    }
+
+    .hero-section .figure-holder .figure-image {
+        width: 400px;
+        bottom: inherit;
+        top: 130px;
+    }
+
+    .hero-carousel .carousel-inner .item-content-inner {
+        max-width: 300px;
+        padding-top: 190px;
+        margin-left: 42%;
+    }
+
+    .team-section .item-inner {
+        min-height: 515px;
+    }
+}
+
+/* Medium devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+    .feature-nav {
+        margin-top: 30px;
+        padding-left: 15px;
+    }
+
+    .feature-nav > li {
+        font-size: 16px;
+    }
+
+    .feature-nav > li > a {
+        padding: 15px 0;
+    }
+
+    .feature-nav > li.active > a {
+        padding: 15px 0;
+    }
+
+    .hero-section .figure-holder .figure-image {
+        width: 420px;
+        bottom: inherit;
+        top: 130px;
+    }
+
+    .hero-carousel .carousel-inner .item-content-inner {
+        max-width: 500px;
+    }
+
+    .team-section .item-inner {
+        min-height: 490px;
+    }
+}
