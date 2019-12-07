@@ -2,10 +2,10 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Responsive website template for developers</title>
-
+    <meta charset="UTF-8">
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800'
           rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
@@ -82,18 +82,56 @@
                 </div>
                 <div class="modal-body">
                     <form action="" method="post">
-                        <div class="form-group">
-                            <label class="col-form-label">Recipient:</label>
-                            <input type="text" class="form-control">
+
+
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a data-toggle="tab" href="#panel1">Панель 1</a></li>
+                            <li><a data-toggle="tab" href="#panel2">Панель 2</a></li>
+                            <li class="dropdown">
+                                <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                    Другие панели
+                                    <b class="caret"></b>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a data-toggle="tab" href="#panel3">Панель 3</a></li>
+                                    <li><a data-toggle="tab" href="#panel4">Панель 4</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+
+
+                        <div class="tab-content">
+                            <div id="panel1" class="tab-pane fade in active">
+                                <h3>Панель 1</h3>
+                                <div class="form-group">
+                                    <label class="col-form-label">Recipient:</label>
+                                    <input type="text" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-form-label">Message:</label>
+                                    <textarea class="form-control"></textarea>
+                                </div>
+                                <input type="hidden" class="form-control" th:name="${_csrf.parameterName}"
+                                       th:value="${_csrf.token}"/>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary" data-dismiss="modal">Send message</button>
+                            </div>
+                            <div id="panel2" class="tab-pane fade">
+                                <h3>Панель 2</h3>
+                                <p>Содержимое 2 панели...</p>
+                            </div>
+                            <div id="panel3" class="tab-pane fade">
+                                <h3>Панель 3</h3>
+                                <p>Содержимое 3 панели...</p>
+                            </div>
+                            <div id="panel4" class="tab-pane fade">
+                                <h3>Панель 4</h3>
+                                <p>Содержимое 4 панели...</p>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label class="col-form-label">Message:</label>
-                            <textarea class="form-control"></textarea>
-                        </div>
-                        <input type="hidden" class="form-control" th:name="${_csrf.parameterName}"
-                               th:value="${_csrf.token}"/>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Send message</button>
+
+
+
                     </form>
                 </div>
 

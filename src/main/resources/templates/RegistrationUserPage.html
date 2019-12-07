@@ -3,14 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <!--===============================================================================================-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="/css/login.css">
+    <!--===============================================================================================-->
 </head>
 <body>
-Reg page
-<form action="/registration" method="post">
-    <div><label> User Name : <input type="text" name="username"/></label></div>
-    <div><label> Password: <input type="password" name="password"/></label></div>
-    <input type="hidden" class="form-control" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-    <div><input type="submit" value="Submit"/></div>
-</form>
+
+<div class="limiter">
+    <div class="container-login100">
+        <div class="wrap-login100">
+            <div class="login100-pic" data-tilt>
+                <img src="/images/img-01.png" alt="IMG">
+            </div>
+            <form action="/registration" method="post" class="login100-form validate-form">
+                <span class="login100-form-title">Registration</span>
+                <div class="wrap-input100 validate-input" data-validate="Valid email is required: ex@abc.xyz">
+                    <input class="input100" type="text" name="username" placeholder="Email/Login">
+                    <span class="focus-input100"></span>
+                    <span class="symbol-input100">
+							<i class="fa fa-envelope" aria-hidden="true"></i>
+                    </span>
+                </div>
+                <div class="wrap-input100 validate-input" data-validate="Password is required">
+                    <input class="input100" type="password" name="password" placeholder="Password">
+                    <span class="focus-input100"></span>
+                    <span class="symbol-input100"><i class="fa fa-lock" aria-hidden="true"></i></span>
+                </div>
+                <input type="hidden" class="form-control" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                <div class="container-login100-form-btn">
+                    <button type="submit" value="Sign In" class="login100-form-btn">Registration</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 </body>
 </html>
