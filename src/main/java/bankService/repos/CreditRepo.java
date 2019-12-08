@@ -4,5 +4,5 @@ import bankService.domain.Credit;
 import org.springframework.data.repository.CrudRepository;
 
 public interface CreditRepo extends CrudRepository<Credit, Long> {
-    //todo
+    Credit findByUser(long id);
 }

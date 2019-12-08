@@ -36,7 +36,9 @@
                     <span class="focus-input100"></span>
                     <span class="symbol-input100"><i class="fa fa-lock" aria-hidden="true"></i></span>
                 </div>
-                <input type="hidden" class="form-control" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                <input type="hidden" class="form-control"
+                       th:name="${_csrf.parameterName}"
+                       th:value="${_csrf.token}"/>
                 <div class="container-login100-form-btn">
                     <button type="submit" value="Sign In" class="login100-form-btn">Login</button>
                 </div>

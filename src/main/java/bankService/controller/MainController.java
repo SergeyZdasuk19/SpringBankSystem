@@ -1,6 +1,8 @@
 package bankService.controller;
 
+import bankService.domain.PaymentAccount;
 import bankService.domain.User;
+import bankService.repos.PaymentRepo;
 import bankService.repos.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -13,6 +15,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class MainController {
     @Autowired
     private UserRepo userRepo;
+    @Autowired
+    private PaymentRepo paymentRepo;
 
     @GetMapping("/")
     public String greeting() {
@@ -22,13 +26,16 @@ public class MainController {
     @GetMapping("/main")
     public String main(@AuthenticationPrincipal User user,
                        Model model) {
+        Iterable<PaymentAccount> paymentAccount = paymentRepo.findAll();
+        model.addAttribute("paymentAccounts", paymentAccount);
         model.addAttribute("user", user);
         return "MainPage.html";
     }
-    @PostMapping("main")
-    public String add(@AuthenticationPrincipal User user) {
 
-        return "main";
+    @GetMapping("/updateAll")
+    public String update(Model model) {
+        Iterable<PaymentAccount> paymentAccount = paymentRepo.findAll();
+        model.addAttribute("paymentAccounts", paymentAccount);
+        return "MainPage.html";
     }
-
 }
