@@ -20,6 +20,7 @@ public class Credit {
     private String address;
     private String passportSeries;
     private String goal;
+    private int amountYears;
     private int wage;
     private int course;
     private boolean status;
@@ -29,6 +30,7 @@ public class Credit {
     }
 
     public Credit(User user,
+                  int amountYears,
                   PaymentAccount paymentAccount,
                   Currency currency,
                   String address,
@@ -38,6 +40,7 @@ public class Credit {
                   int course,
                   boolean status) {
         this.user = user;
+        this.amountYears = amountYears;
         this.paymentAccount = paymentAccount;
         this.currency = currency;
         this.address = address;
@@ -46,6 +49,14 @@ public class Credit {
         this.wage = wage;
         this.course = course;
         this.status = status;
+    }
+
+    public int getAmountYears() {
+        return amountYears;
+    }
+
+    public void setAmountYears(int amountYears) {
+        this.amountYears = amountYears;
     }
 
     public int getCourse() {

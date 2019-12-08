@@ -185,6 +185,12 @@
                                                 th:value="${cur}" th:text="${cur}"></option>
                                     </select>
                                 </div>
+                                <label>Years</label>
+                                <div class="form-group">
+                                    <input type="number" class="form-control" placeholder="1"
+                                           aria-label="Recipient's username" aria-describedby="basic-addon2"
+                                           name="years">
+                                </div>
                                 <label>Payment</label>
                                 <div class="form-group">
                                     <select class="selectpicker" name="paymentAccount">
@@ -245,6 +251,7 @@
                                     <thead>
                                     <tr>
                                         <th>Имя клиента</th>
+                                        <th>Срок/год</th>
                                         <th>Валюта</th>
                                         <th>Ид кредита</th>
                                         <th>Сумма</th>
@@ -255,6 +262,7 @@
                                     <tbody>
                                     <tr th:each="credit : ${credit}">
                                         <td th:utext="${credit.user.username}"></td>
+                                        <td th:utext="${credit.amountYears}"></td>
                                         <td th:utext="${credit.currency}"></td>
                                         <td th:utext="${credit.id}"></td>
                                         <td th:utext="${credit.wage}"></td>

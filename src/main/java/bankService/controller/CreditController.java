@@ -18,6 +18,7 @@ public class CreditController {
 
     @PostMapping("/credit/add")
     public String addCredit(@AuthenticationPrincipal User user,
+                            @RequestParam Integer years,
                             @RequestParam Currency currentCurrency,
                             @RequestParam PaymentAccount paymentAccount,
                             @RequestParam String address,
@@ -25,14 +26,14 @@ public class CreditController {
                             @RequestParam String creditGoal,
                             @RequestParam Integer wage,
                             @RequestParam Integer course) {
-        Credit credit = new Credit(user, paymentAccount, currentCurrency, address,
-                passportSeries, creditGoal, wage, course, true);
+        Credit credit = new Credit(user, years, paymentAccount, currentCurrency, address,
+                passportSeries, creditGoal, getRealWage(wage, course), course, true);
         creditRepo.save(credit);
         return "redirect:/updateAll";
     }
 
     public Integer getRealWage(int wage,
                                int course) {
-        return (wage * course) / 100;
+        return wage + (wage * course) / 100;
     }
 }
