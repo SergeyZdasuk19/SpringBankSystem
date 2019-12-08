@@ -37,11 +37,10 @@
                     <li class="active nav-item">
                         <a href="#" data-toggle="modal" data-target="#payment">Расчетный счет</a>
                     </li>
-                    <li class="nav-item"><a href="#testimonials">Testimonials</a></li>
+                    <li class="nav-item">
+                        <a href="#" data-toggle="modal" data-target="#credit">Кредит</a>
+                    </li>
                     <li class="nav-item"><a href="#features">Features</a></li>
-                    <li class="nav-item"><a href="#team">Team</a></li>
-                    <li class="nav-item"><a href="#pricing">Pricing</a></li>
-                    <li class="nav-item"><a href="#contact">Contact</a></li>
                     <li class="nav-item"><a>
                         <form action="/logout" method="post">
                             <input type="hidden" class="form-control" th:name="${_csrf.parameterName}"
@@ -73,8 +72,11 @@
     </div><!--//hero-->
 </div>
 
+
 <div class="container">
-    <!-- Modal -->
+
+    <!--Расчетный счет-->
+
     <div class="modal fade" id="payment" role="dialog">
         <div class="modal-dialog">
             <!-- Modal content-->
@@ -150,7 +152,139 @@
             </div>
         </div>
     </div>
+
+    <!--Кредит-->
+
+    <div class="modal fade" id="credit" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true"></span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a data-toggle="tab" href="#credit1">Оформить кредит</a></li>
+                        <li><a data-toggle="tab" href="#credit2">Кредит(ы)</a></li>
+                    </ul>
+
+
+                    <div class="tab-content">
+                        <div id="credit1" class="tab-pane fade in active">
+
+
+                            <form action="/credit/add" method="post">
+                                <label>Currency</label>
+                                <div class="form-group">
+                                    <select class="selectpicker" name="currentCurrency">
+                                        <option th:each="cur : ${T(bankService.domain.Currency).values()}"
+                                                th:value="${cur}" th:text="${cur}"></option>
+                                    </select>
+                                </div>
+                                <label>Payment</label>
+                                <div class="form-group">
+                                    <select class="selectpicker" name="paymentAccount">
+                                        <option th:each="payment : ${paymentAccounts}"
+                                                th:value="${payment.id}" th:text="${payment.number}"></option>
+                                    </select>
+                                </div>
+                                <label>Address</label>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="Минск, Беларусь..."
+                                           aria-label="Recipient's username" aria-describedby="basic-addon2"
+                                           name="address">
+                                </div>
+                                <label>Passport</label>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="MP78451"
+                                           aria-label="Recipient's username" aria-describedby="basic-addon2"
+                                           name="passportSeries">
+                                </div>
+                                <label>Goal</label>
+                                <div class="form-group">
+                                    <select class="selectpicker" name="creditGoal">
+                                        <option value="Кредит на недвижимость">Кредит на недвижимость</option>
+                                        <option value="Кредит на обучение">Кредит на обучение</option>
+                                        <option value="Кредит на лечение">Кредит на лечение</option>
+                                        <option value="Кредит на потребительские нужды">Кредит на потребительские нужды
+                                        </option>
+                                        <option value="Кредит на открытие бизнеса">Кредит на открытие бизнеса</option>
+                                    </select>
+                                </div>
+                                <label>Wage</label>
+                                <div class="form-group">
+                                    <input type="number" class="form-control" placeholder="400"
+                                           aria-label="Recipient's username" aria-describedby="basic-addon2"
+                                           name="wage">
+                                </div>
+                                <label>Course, %</label>
+                                <div class="form-group">
+                                    <input type="number" class="form-control" readonly
+                                           aria-label="Recipient's username" aria-describedby="basic-addon2"
+                                           name="course" value="12"/>
+                                </div>
+                                <div style="text-align: right">
+                                    <input type="hidden" class="form-control"
+                                           th:name="${_csrf.parameterName}"
+                                           th:value="${_csrf.token}"/>
+                                    <button type="submit" class="btn btn-primary">Add</button>
+                                    <button type="button" class="btn btn-secondary"
+                                            data-dismiss="modal">Close
+                                    </button>
+                                </div>
+                            </form>
+
+                        </div>
+                        <div id="credit2" class="tab-pane fade">
+                            <label>
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th>Имя клиента</th>
+                                        <th>Валюта</th>
+                                        <th>Ид кредита</th>
+                                        <th>Сумма</th>
+                                        <th>Процент</th>
+                                        <th>Статус</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="credit : ${credit}">
+                                        <td th:utext="${credit.user.username}"></td>
+                                        <td th:utext="${credit.currency}"></td>
+                                        <td th:utext="${credit.id}"></td>
+                                        <td th:utext="${credit.wage}"></td>
+                                        <td th:utext="${credit.course}"></td>
+                                        <td th:utext="${credit.status == true} ? 'Активный' : 'Погашен'"></td>
+
+                                        <td>
+                                            <!--<form th:action="'/payment/addAmount/' + ${account.id}"-->
+                                                  <!--method="post">-->
+                                                <!--<input style="width: 100px" type="number" name="amount"/>-->
+                                                <!--<input type="hidden" class="form-control"-->
+                                                       <!--th:name="${_csrf.parameterName}"-->
+                                                       <!--th:value="${_csrf.token}"/>-->
+                                                <!--<button type="submit" class="btn btn-primary">Add</button>-->
+                                            <!--</form>-->
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 </div>
+
 
 </body>
 </html>

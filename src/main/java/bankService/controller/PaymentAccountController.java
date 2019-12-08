@@ -26,7 +26,6 @@ public class PaymentAccountController {
     @PostMapping("/paymentAccount/add")
     public String addAccount(@AuthenticationPrincipal User user,
                              @RequestParam Currency currentCurrency) {
-        System.out.println(getCode(currentCurrency));
         PaymentAccount paymentAccountObj = new PaymentAccount(currentCurrency, user, getCode(currentCurrency));
         paymentRepo.save(paymentAccountObj);
         return "redirect:/updateAll";

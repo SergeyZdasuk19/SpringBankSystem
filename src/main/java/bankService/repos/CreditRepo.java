@@ -3,6 +3,8 @@ package bankService.repos;
 import bankService.domain.Credit;
 import org.springframework.data.repository.CrudRepository;
 
+import java.util.List;
+
 public interface CreditRepo extends CrudRepository<Credit, Long> {
-    Credit findByUser(long id);
+    List<Credit> findByUserId(long id);
 }
