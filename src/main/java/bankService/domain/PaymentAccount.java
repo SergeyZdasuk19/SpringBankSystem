@@ -1,7 +1,10 @@
 package bankService.domain;
 
+import lombok.Data;
+
 import javax.persistence.*;
 
+@Data
 @Entity
 @Table(name = "paymentAccount")
 public class PaymentAccount {
@@ -15,54 +18,16 @@ public class PaymentAccount {
     @Enumerated(EnumType.STRING)
     private Currency currency;
     private int amount;
+    private String status;
 
     public PaymentAccount() {
 
     }
 
-    public PaymentAccount(Currency currency, User user, String number) {
+    public PaymentAccount(Currency currency, User user, String number, String status) {
         this.currency = currency;
         this.user = user;
         this.number = number;
-    }
-
-    public String getNumber() {
-        return number;
-    }
-
-    public void setNumber(String number) {
-        this.number = number;
-    }
-
-    public int getAmount() {
-        return amount;
-    }
-
-    public void setAmount(int amount) {
-        this.amount = amount;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public Currency getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(Currency currency) {
-        this.currency = currency;
+        this.status = status;
     }
 }

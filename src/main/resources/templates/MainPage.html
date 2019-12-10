@@ -77,8 +77,8 @@
 
     <!--Расчетный счет-->
 
-    <div class="modal fade" id="payment" role="dialog">
-        <div class="modal-dialog">
+    <div class="modal fade bd-example-modal-lg" id="payment" role="dialog">
+        <div class="modal-dialog modal-lg">
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
@@ -87,65 +87,80 @@
                     </button>
                 </div>
                 <div class="modal-body">
+                    <div th:each="role : ${user.roles}">
+                        <div th:switch="${role}">
+                            <div th:case="${T(bankService.domain.Role).ADMIN}">ADMIN</div>
+                            <div th:case="${T(bankService.domain.Role).USER}">
+                                <ul class="nav nav-tabs">
+                                    <li class="active"><a data-toggle="tab" href="#panel1">Добавить счет</a></li>
+                                    <li><a data-toggle="tab" href="#panel2">Cчета</a></li>
+                                </ul>
 
 
-                    <ul class="nav nav-tabs">
-                        <li class="active"><a data-toggle="tab" href="#panel1">Добавить счет</a></li>
-                        <li><a data-toggle="tab" href="#panel2">Cчет(ы)</a></li>
-                    </ul>
-
-
-                    <div class="tab-content">
-                        <div id="panel1" class="tab-pane fade in active">
-                            <form action="/paymentAccount/add" method="post">
-                                <h3>Выберите валюту</h3>
-                                <label class="col-form-label">Currency:</label>
-                                <select class="selectpicker" name="currentCurrency">
-                                    <option th:each="cur : ${T(bankService.domain.Currency).values()}"
-                                            th:value="${cur}" th:text="${cur}"></option>
-                                </select>
-                                <input type="hidden" class="form-control"
-                                       th:name="${_csrf.parameterName}"
-                                       th:value="${_csrf.token}"/>
-                                <button type="submit" class="btn btn-primary">Add</button>
-                                <div style="text-align: right">
-                                    <button type="button" class="btn btn-secondary"
-                                            data-dismiss="modal">Close
-                                    </button>
+                                <div class="tab-content">
+                                    <div id="panel1" class="tab-pane fade in active">
+                                        <form action="/paymentAccount/addRequest" method="post">
+                                            <h3>Выберите валюту</h3>
+                                            <label class="col-form-label">Currency:</label>
+                                            <select class="selectpicker" name="currentCurrency">
+                                                <option th:each="cur : ${T(bankService.domain.Currency).values()}"
+                                                        th:value="${cur}" th:text="${cur}"></option>
+                                            </select>
+                                            <input type="hidden" class="form-control"
+                                                   th:name="${_csrf.parameterName}"
+                                                   th:value="${_csrf.token}"/>
+                                            <button type="submit" class="btn btn-primary">Отправить заявку</button>
+                                            <div style="text-align: right">
+                                                <button type="button" class="btn btn-secondary"
+                                                        data-dismiss="modal">Закрыть
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div id="panel2" class="tab-pane fade">
+                                        <label>
+                                            <table class="table">
+                                                <thead>
+                                                <tr>
+                                                    <th>Имя клиента</th>
+                                                    <th>Валюта</th>
+                                                    <th>Номер</th>
+                                                    <th>Остаток</th>
+                                                    <th>Статус</th>
+                                                    <th></th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr th:each="account : ${paymentAccounts}">
+                                                    <td th:utext="${account.user.username}"></td>
+                                                    <td th:utext="${account.currency}"></td>
+                                                    <td th:utext="${account.number}"></td>
+                                                    <td th:utext="${account.amount}"></td>
+                                                    <td th:if="${account.status}=='На оформлении'">На оформлении</td>
+                                                    <td th:if="${account.status}=='Активный'">Активный</td>
+                                                    <td th:if="${account.status}=='Активный'">
+                                                        <form th:action="'/payment/addAmount/' + ${account.id}"
+                                                              method="post">
+                                                            <input style="width: 100px" type="number" name="amount"
+                                                                   required/>
+                                                            <input type="hidden" class="form-control"
+                                                                   th:name="${_csrf.parameterName}"
+                                                                   th:value="${_csrf.token}"/>
+                                                            <button type="submit" class="btn btn-primary">Пополнить
+                                                                баланс
+                                                            </button>
+                                                        </form>
+                                                    </td>
+                                                    <td th:if="${account.status}=='Подтвердить заявку'">Подтвердить
+                                                        заявку
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </label>
+                                    </div>
                                 </div>
-                            </form>
-                        </div>
-                        <div id="panel2" class="tab-pane fade">
-                            <label>
-                                <table class="table">
-                                    <thead>
-                                    <tr>
-                                        <th>Имя клиента</th>
-                                        <th>Валюта</th>
-                                        <th>Номер</th>
-                                        <th>Остаток</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr th:each="account : ${paymentAccounts}">
-                                        <td th:utext="${account.user.username}"></td>
-                                        <td th:utext="${account.currency}"></td>
-                                        <td th:utext="${account.number}"></td>
-                                        <td th:utext="${account.amount}"></td>
-                                        <td>
-                                            <form th:action="'/payment/addAmount/' + ${account.id}"
-                                                  method="post">
-                                                <input style="width: 100px" type="number" name="amount"/>
-                                                <input type="hidden" class="form-control"
-                                                       th:name="${_csrf.parameterName}"
-                                                       th:value="${_csrf.token}"/>
-                                                <button type="submit" class="btn btn-primary">Add</button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </label>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -271,12 +286,12 @@
 
                                         <td>
                                             <!--<form th:action="'/payment/addAmount/' + ${account.id}"-->
-                                                  <!--method="post">-->
-                                                <!--<input style="width: 100px" type="number" name="amount"/>-->
-                                                <!--<input type="hidden" class="form-control"-->
-                                                       <!--th:name="${_csrf.parameterName}"-->
-                                                       <!--th:value="${_csrf.token}"/>-->
-                                                <!--<button type="submit" class="btn btn-primary">Add</button>-->
+                                            <!--method="post">-->
+                                            <!--<input style="width: 100px" type="number" name="amount"/>-->
+                                            <!--<input type="hidden" class="form-control"-->
+                                            <!--th:name="${_csrf.parameterName}"-->
+                                            <!--th:value="${_csrf.token}"/>-->
+                                            <!--<button type="submit" class="btn btn-primary">Add</button>-->
                                             <!--</form>-->
                                         </td>
                                     </tr>

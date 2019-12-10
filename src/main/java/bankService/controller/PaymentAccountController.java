@@ -23,10 +23,10 @@ public class PaymentAccountController {
     @Autowired
     private PaymentRepo paymentRepo;
 
-    @PostMapping("/paymentAccount/add")
+    @PostMapping("/paymentAccount/addRequest")
     public String addAccount(@AuthenticationPrincipal User user,
                              @RequestParam Currency currentCurrency) {
-        PaymentAccount paymentAccountObj = new PaymentAccount(currentCurrency, user, getCode(currentCurrency));
+        PaymentAccount paymentAccountObj = new PaymentAccount(currentCurrency, user, getCode(currentCurrency), "На оформлении");
         paymentRepo.save(paymentAccountObj);
         return "redirect:/updateAll";
     }
