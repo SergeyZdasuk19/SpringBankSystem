@@ -1,7 +1,6 @@
 package bankService.controller;
 
-import bankService.domain.Credit;
-import bankService.domain.PaymentAccount;
+import bankService.domain.Role;
 import bankService.domain.User;
 import bankService.repos.CreditRepo;
 import bankService.repos.PaymentRepo;
@@ -11,7 +10,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class MainController {
@@ -31,16 +29,20 @@ public class MainController {
     public String main(@AuthenticationPrincipal User user,
                        Model model) {
         model.addAttribute("user", user);
-        model.addAttribute("paymentAccounts", paymentRepo.findByUserId(user.getId()));
-        model.addAttribute("credit", creditRepo.findByUserId(user.getId()));
-        return "MainPage.html";
-    }
-
-    @GetMapping("/updateAll")
-    public String update(@AuthenticationPrincipal User user,
-                         Model model) {
-        model.addAttribute("paymentAccounts", paymentRepo.findByUserId(user.getId()));
-        model.addAttribute("credit", creditRepo.findByUserId(user.getId()));
+        for (Role role : user.getRoles()) {
+            switch (role) {
+                case USER:
+                    model.addAttribute("user", user);
+                    model.addAttribute("paymentAccounts", paymentRepo.findByUserId(user.getId()));
+                    model.addAttribute("credit", creditRepo.findByUserId(user.getId()));
+                    break;
+                case ADMIN:
+                    model.addAttribute("user", user);
+                    model.addAttribute("paymentAccounts", paymentRepo.findAll());
+                    model.addAttribute("credit", creditRepo.findAll());
+                    break;
+            }
+        }
         return "MainPage.html";
     }
 }

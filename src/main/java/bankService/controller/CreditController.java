@@ -29,7 +29,7 @@ public class CreditController {
         Credit credit = new Credit(user, years, paymentAccount, currentCurrency, address,
                 passportSeries, creditGoal, getRealWage(wage, course), course, true);
         creditRepo.save(credit);
-        return "redirect:/updateAll";
+        return "redirect:/main";
     }
 
     public Integer getRealWage(int wage,
