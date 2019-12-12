@@ -26,7 +26,7 @@ public class Credit {
     private int amountYears;
     private int wage;
     private int course;
-    private boolean status;
+    private String status;
 
     public Credit() {
 
@@ -41,7 +41,7 @@ public class Credit {
                   String goal,
                   int wage,
                   int course,
-                  boolean status) {
+                  String status) {
         this.user = user;
         this.amountYears = amountYears;
         this.paymentAccount = paymentAccount;

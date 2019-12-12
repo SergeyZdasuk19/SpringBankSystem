@@ -350,8 +350,8 @@
 
     <!--Кредит-->
 
-    <div class="modal fade" id="credit" role="dialog">
-        <div class="modal-dialog">
+    <div class="modal fade bd-example-modal-lg" id="credit" role="dialog">
+        <div class="modal-dialog modal-lg">
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
@@ -361,87 +361,9 @@
                 </div>
                 <div class="modal-body">
 
-
-                    <ul class="nav nav-tabs">
-                        <li class="active"><a data-toggle="tab" href="#credit1">Оформить кредит</a></li>
-                        <li><a data-toggle="tab" href="#credit2">Кредит(ы)</a></li>
-                    </ul>
-
-
-                    <div class="tab-content">
-                        <div id="credit1" class="tab-pane fade in active">
-
-
-                            <form action="/credit/add" method="post">
-                                <label>Currency</label>
-                                <div class="form-group">
-                                    <select class="selectpicker" name="currentCurrency">
-                                        <option th:each="cur : ${T(bankService.domain.Currency).values()}"
-                                                th:value="${cur}" th:text="${cur}"></option>
-                                    </select>
-                                </div>
-                                <label>Years</label>
-                                <div class="form-group">
-                                    <input type="number" class="form-control" placeholder="1"
-                                           aria-label="Recipient's username" aria-describedby="basic-addon2"
-                                           name="years">
-                                </div>
-                                <label>Payment</label>
-                                <div class="form-group">
-                                    <select class="selectpicker" name="paymentAccount">
-                                        <option th:each="payment : ${paymentAccounts}"
-                                                th:value="${payment.id}" th:text="${payment.number}"></option>
-                                    </select>
-                                </div>
-                                <label>Address</label>
-                                <div class="form-group">
-                                    <input type="text" class="form-control" placeholder="Минск, Беларусь..."
-                                           aria-label="Recipient's username" aria-describedby="basic-addon2"
-                                           name="address">
-                                </div>
-                                <label>Passport</label>
-                                <div class="form-group">
-                                    <input type="text" class="form-control" placeholder="MP78451"
-                                           aria-label="Recipient's username" aria-describedby="basic-addon2"
-                                           name="passportSeries">
-                                </div>
-                                <label>Goal</label>
-                                <div class="form-group">
-                                    <select class="selectpicker" name="creditGoal">
-                                        <option value="Кредит на недвижимость">Кредит на недвижимость</option>
-                                        <option value="Кредит на обучение">Кредит на обучение</option>
-                                        <option value="Кредит на лечение">Кредит на лечение</option>
-                                        <option value="Кредит на потребительские нужды">Кредит на потребительские нужды
-                                        </option>
-                                        <option value="Кредит на открытие бизнеса">Кредит на открытие бизнеса</option>
-                                    </select>
-                                </div>
-                                <label>Wage</label>
-                                <div class="form-group">
-                                    <input type="number" class="form-control" placeholder="400"
-                                           aria-label="Recipient's username" aria-describedby="basic-addon2"
-                                           name="wage">
-                                </div>
-                                <label>Course, %</label>
-                                <div class="form-group">
-                                    <input type="number" class="form-control" readonly
-                                           aria-label="Recipient's username" aria-describedby="basic-addon2"
-                                           name="course" value="12"/>
-                                </div>
-                                <div style="text-align: right">
-                                    <input type="hidden" class="form-control"
-                                           th:name="${_csrf.parameterName}"
-                                           th:value="${_csrf.token}"/>
-                                    <button type="submit" class="btn btn-primary">Add</button>
-                                    <button type="button" class="btn btn-secondary"
-                                            data-dismiss="modal">Close
-                                    </button>
-                                </div>
-                            </form>
-
-                        </div>
-                        <div id="credit2" class="tab-pane fade">
-                            <label>
+                    <div th:each="role : ${user.roles}">
+                        <div th:switch="${role}">
+                            <div th:case="${T(bankService.domain.Role).ADMIN}">
                                 <table class="table">
                                     <thead>
                                     <tr>
@@ -451,24 +373,438 @@
                                         <th>Ид кредита</th>
                                         <th>Сумма</th>
                                         <th>Процент</th>
-                                        <th>Статус</th>
+                                        <th></th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <tr th:each="credit : ${credit}">
-                                        <td th:utext="${credit.user.username}"></td>
-                                        <td th:utext="${credit.amountYears}"></td>
-                                        <td th:utext="${credit.currency}"></td>
-                                        <td th:utext="${credit.id}"></td>
-                                        <td th:utext="${credit.wage}"></td>
-                                        <td th:utext="${credit.course}"></td>
-                                        <td th:utext="${credit.status == true} ? 'Активный' : 'Погашен'"></td>
+                                        <form th:action="'/credit/addRequest/'+${credit.id}" method="post">
+                                            <div th:if="${credit.status=='На оформлении'}">
+                                                <td th:utext="${credit.user.username}"></td>
+                                                <td th:utext="${credit.amountYears}"></td>
+                                                <td th:utext="${credit.currency}"></td>
+                                                <td th:utext="${credit.id}"></td>
+                                                <td th:utext="${credit.wage}"></td>
+                                                <td th:utext="${credit.course}"></td>
+                                                <td>
+                                                    <input type="hidden" class="form-control"
+                                                           th:name="${_csrf.parameterName}"
+                                                           th:value="${_csrf.token}"/>
+                                                    <button type="submit" class="btn btn-primary">
+                                                        Подтвердить заявку
+                                                    </button>
+                                                </td>
+                                            </div>
+                                        </form>
                                     </tr>
                                     </tbody>
                                 </table>
-                            </label>
+                                <div style="text-align: right">
+                                    <button type="button" class="btn btn-secondary"
+                                            data-dismiss="modal">Закрыть
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div th:case="${T(bankService.domain.Role).USER}">
+                                <ul class="nav nav-tabs">
+                                    <li class="active"><a data-toggle="tab" href="#credit1">Оформить кредит</a></li>
+                                    <li><a data-toggle="tab" href="#credit2">Кредит(ы)</a></li>
+                                </ul>
+
+                                <div class="tab-content">
+                                    <div id="credit1" class="tab-pane fade in active">
+                                        <form action="/credit/sendRequest" method="post">
+                                            <label>Currency</label>
+                                            <div class="form-group">
+                                                <select class="selectpicker" name="currentCurrency">
+                                                    <option th:each="cur : ${T(bankService.domain.Currency).values()}"
+                                                            th:value="${cur}" th:text="${cur}"></option>
+                                                </select>
+                                            </div>
+                                            <label>Years</label>
+                                            <div class="form-group">
+                                                <input type="number" class="form-control" placeholder="1"
+                                                       aria-label="Recipient's username" aria-describedby="basic-addon2"
+                                                       name="years">
+                                            </div>
+                                            <label>Payment</label>
+                                            <div class="form-group">
+                                                <select class="selectpicker" name="paymentAccount">
+                                                    <option th:each="payment : ${paymentAccounts}"
+                                                            th:value="${payment.id}"
+                                                            th:text="${payment.number}"></option>
+                                                </select>
+                                            </div>
+                                            <label>Address</label>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" placeholder="Минск, Беларусь..."
+                                                       aria-label="Recipient's username" aria-describedby="basic-addon2"
+                                                       name="address">
+                                            </div>
+                                            <label>Passport</label>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" placeholder="MP78451"
+                                                       aria-label="Recipient's username" aria-describedby="basic-addon2"
+                                                       name="passportSeries">
+                                            </div>
+                                            <label>Goal</label>
+                                            <div class="form-group">
+                                                <select class="selectpicker" name="creditGoal">
+                                                    <option value="Кредит на недвижимость">Кредит на недвижимость
+                                                    </option>
+                                                    <option value="Кредит на обучение">Кредит на обучение</option>
+                                                    <option value="Кредит на лечение">Кредит на лечение</option>
+                                                    <option value="Кредит на потребительские нужды">Кредит на
+                                                        потребительские нужды
+                                                    </option>
+                                                    <option value="Кредит на открытие бизнеса">Кредит на открытие
+                                                        бизнеса
+                                                    </option>
+                                                </select>
+                                            </div>
+                                            <label>Wage</label>
+                                            <div class="form-group">
+                                                <input type="number" class="form-control" placeholder="400"
+                                                       aria-label="Recipient's username" aria-describedby="basic-addon2"
+                                                       name="wage">
+                                            </div>
+                                            <label>Course, %</label>
+                                            <div class="form-group">
+                                                <input type="number" class="form-control" readonly
+                                                       aria-label="Recipient's username" aria-describedby="basic-addon2"
+                                                       name="course" value="12"/>
+                                            </div>
+                                            <div style="text-align: right">
+                                                <input type="hidden" class="form-control"
+                                                       th:name="${_csrf.parameterName}"
+                                                       th:value="${_csrf.token}"/>
+                                                <button type="submit" class="btn btn-primary">Отправить заявку</button>
+                                                <div style="text-align: right">
+                                                    <button type="button" class="btn btn-secondary"
+                                                            data-dismiss="modal">Закрыть
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+
+                                    </div>
+                                    <div style="min-height: 400px" id="credit2" class="tab-pane fade">
+                                        <label>
+                                            <table class="table">
+                                                <thead>
+                                                <tr>
+                                                    <th>Имя клиента</th>
+                                                    <th>Срок/год</th>
+                                                    <th>Валюта</th>
+                                                    <th>Ид кредита</th>
+                                                    <th>Сумма</th>
+                                                    <th>Процент</th>
+                                                    <th>Статус</th>
+                                                    <th></th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr th:each="credit : ${credit}">
+                                                    <td th:utext="${credit.user.username}"></td>
+                                                    <td th:utext="${credit.amountYears}"></td>
+                                                    <td th:utext="${credit.currency}"></td>
+                                                    <td th:utext="${credit.id}"></td>
+                                                    <td th:utext="${credit.wage}"></td>
+                                                    <td th:utext="${credit.course}"></td>
+                                                    <td th:if="${credit.status=='Погашен'}">Погашен</td>
+                                                    <td th:if="${credit.status=='На оформлении'}">На оформлении</td>
+                                                    <td th:if="${credit.status=='Активный'}">Активный</td>
+                                                    <td th:if="${credit.status=='Активный'}">
+                                                        <form th:action="'/creditCard/addAmountOnCredit/' + ${credit.id}"
+                                                              method="post">
+                                                            <button data-toggle="modal"
+                                                                    th:attr="data-target='#modal-addAmountOnCreditWithCard'+${credit.id}"
+                                                                    type="button" class="btn btn-success">
+                                                                Погасить кредит с карты
+                                                            </button>
+                                                        </form>
+                                                    </td>
+                                                    <td th:if="${credit.status}=='Подтвердить заявку'">
+                                                        <button data-toggle="modal"
+                                                                th:attr="data-target='#modal-acceptRequestCredit'+${credit.id}"
+                                                                type="button" class="btn btn-success">
+                                                            Подтвердить заявку
+                                                        </button>
+                                                    </td>
+
+
+                                                    <!-- Модальное окно погасить кредит с карты -->
+                                                    <div class="modal fade"
+                                                         th:attr="id='modal-addAmountOnCreditWithCard'+${credit.id}"
+                                                         tabindex="-1" role="dialog"
+                                                         aria-labelledby="modalLabel2">
+                                                        <div class="modal-dialog" role="document">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <button type="button" class="close"
+                                                                            data-dismiss="modal" aria-label="Закрыть">
+                                                                        <span aria-hidden="true">×</span>
+                                                                    </button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <form th:action="'/creditCard/addAmountOnCredit/'+${credit.id}"
+                                                                          method="post">
+
+                                                                        <label>Сумма</label>
+                                                                        <div class="form-group">
+                                                                            <input type="number" class="form-control"
+                                                                                   aria-label="Recipient's username"
+                                                                                   aria-describedby="basic-addon2"
+                                                                                   name="amount" required>
+                                                                        </div>
+                                                                        <label>Номер карты</label>
+                                                                        <div class="form-group">
+                                                                            <input type="text" class="form-control"
+                                                                                   aria-label="Recipient's username"
+                                                                                   aria-describedby="basic-addon2"
+                                                                                   name="number" required
+                                                                                   pattern="[0-9]{4}\s[0-9]{4}\s[0-9]{4}\s[0-9]{4}">
+                                                                        </div>
+                                                                        <label>CVC</label>
+                                                                        <div class="form-group">
+                                                                            <input type="number" class="form-control"
+                                                                                   aria-label="Recipient's username"
+                                                                                   aria-describedby="basic-addon2"
+                                                                                   name="cvc" required>
+                                                                        </div>
+                                                                        <input type="hidden" class="form-control"
+                                                                               th:name="${_csrf.parameterName}"
+                                                                               th:value="${_csrf.token}"/>
+                                                                        <button type="submit" class="btn btn-primary">
+                                                                            Погасить кредит
+                                                                        </button>
+                                                                    </form>
+                                                                </div>
+
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-default"
+                                                                            data-dismiss="modal">Закрыть
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
+                                                    <!-- Модальное окно Подтвердить заявку на получение кредита -->
+                                                    <div class="modal fade"
+                                                         th:attr="id='modal-acceptRequestCredit'+${credit.id}"
+                                                         tabindex="-1" role="dialog"
+                                                         aria-labelledby="modalLabel2">
+                                                        <div class="modal-dialog" role="document">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <button type="button" class="close"
+                                                                            data-dismiss="modal" aria-label="Закрыть">
+                                                                        <span aria-hidden="true">×</span>
+                                                                    </button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <form th:action="'/credit/activate/'+${credit.id}"
+                                                                          method="post">
+                                                                        <h5>
+                                                                            1. Условия погашения процентов за
+                                                                            пользование
+                                                                            кредитом изложить в следующей редакции:
+
+                                                                            «При платеже, совершаемом в случае акцепта
+                                                                            настоящего предложения, уплачиваются
+                                                                            проценты,
+                                                                            начисленные на остаток задолженности за
+                                                                            период
+                                                                            со дня последнего платежа либо со дня,
+                                                                            следующего за днем последнего платежа (в
+                                                                            зависимости от условий заключенного
+                                                                            действующего
+                                                                            кредитного договора), по последнее число
+                                                                            предыдущего месяца.
+
+                                                                            Если вышеуказанный платеж одновременно
+                                                                            является
+                                                                            первым плановым платежом с момента
+                                                                            заключения
+                                                                            кредитного договора, то уплачиваются
+                                                                            проценты,
+                                                                            начисленные на сумму выданного кредита за
+                                                                            период
+                                                                            со дня, следующего за днем выдачи кредита,
+                                                                            по
+                                                                            последнее число месяца, в котором
+                                                                            произведена
+                                                                            выдача кредита (части кредита).
+
+                                                                            Если вышеуказанный платеж одновременно
+                                                                            является
+                                                                            последним платежом, то уплачиваются
+                                                                            проценты,
+                                                                            начисленные на остаток задолженности за
+                                                                            период
+                                                                            со дня последнего платежа по день,
+                                                                            предшествующий дню полного возврата кредита
+                                                                            (включительно), либо со дня, следующего за
+                                                                            днем
+                                                                            последнего платежа, по день полного возврата
+                                                                            кредита (включительно) (в зависимости от
+                                                                            условий
+                                                                            заключенного действующего кредитного
+                                                                            договора).
+
+                                                                            При последующих платежах уплачиваются
+                                                                            проценты,
+                                                                            начисленные на остаток задолженности за
+                                                                            период с
+                                                                            первого по последнее число предыдущего
+                                                                            месяца.
+
+                                                                            При последнем платеже уплачиваются проценты,
+                                                                            начисленные на остаток задолженности за
+                                                                            период с
+                                                                            первого числа предыдущего месяца по день,
+                                                                            предшествующий дню полного возврата кредита
+                                                                            (включительно), либо по день полного
+                                                                            возврата
+                                                                            кредита (включительно) (в зависимости от
+                                                                            условий
+                                                                            заключенного действующего кредитного
+                                                                            договора).
+
+                                                                            По кредитам с использованием кредитных
+                                                                            карточек
+                                                                            при наличии расходных операций, не учтенных
+                                                                            во
+                                                                            время начисления процентов за пользование
+                                                                            кредитом, Кредитодатель корректирует размер
+                                                                            процентов за пользование кредитом в месяце
+                                                                            отражения расходных операций по счету по
+                                                                            учету
+                                                                            кредита без отнесения неуплаченных сумм на
+                                                                            счет
+                                                                            просроченных платежей по процентам.».
+
+                                                                            2. Условия досрочного возврата (погашения)
+                                                                            кредита изложить в следующей редакции:
+
+                                                                            по кредитным договорам на финансирование
+                                                                            недвижимости, а также в соответствии с
+                                                                            Указом №
+                                                                            368 – «Кредитополучатель имеет право
+                                                                            осуществить
+                                                                            досрочное полное погашение кредита с
+                                                                            одновременной уплатой процентов за
+                                                                            фактическое
+                                                                            время пользования кредитом либо частичное
+                                                                            погашение кредита, при котором досрочно
+                                                                            погашенная сумма засчитывается в счет
+                                                                            погашения
+                                                                            будущих платежей по кредиту или при
+                                                                            обращении
+                                                                            Кредитополучателя производится пересчет
+                                                                            платежей
+                                                                            по кредиту с заключением дополнительного
+                                                                            соглашения к настоящему договору с указанием
+                                                                            сумм платежей по кредиту, пересчитанных
+                                                                            исходя
+                                                                            из остатка задолженности по кредиту и
+                                                                            оставшегося количества платежных периодов.»;
+
+                                                                            по кредитным договорам на потребительские
+                                                                            нужды
+                                                                            (за исключением кредита «Проверено временем»
+                                                                            и
+                                                                            кредитов на потребительские нужды, погашение
+                                                                            платежей по которым осуществляется в
+                                                                            соответствии с графиком погашения) –
+                                                                            «Кредитополучатель имеет право осуществить
+                                                                            полное досрочное погашение кредита с
+                                                                            одновременной уплатой процентов за
+                                                                            фактическое
+                                                                            время пользования кредитом в период действия
+                                                                            кредитного договора. Допускается досрочное
+                                                                            погашение части кредита с уплатой процентов
+                                                                            за
+                                                                            фактическое время пользования кредитом. При
+                                                                            этом
+                                                                            досрочно погашенная часть кредита
+                                                                            засчитывается
+                                                                            в счет погашения будущих платежей по
+                                                                            кредитному
+                                                                            договору либо при обращении
+                                                                            Кредитополучателя
+                                                                            производится пересчет платежей по кредиту с
+                                                                            заключением дополнительного соглашения к
+                                                                            настоящему договору с указанием сумм
+                                                                            платежей по
+                                                                            кредиту, пересчитанных исходя из остатка
+                                                                            задолженности по кредиту и оставшегося
+                                                                            количества платежных периодов;
+
+                                                                            по кредитным договорам на потребительские
+                                                                            нужды,
+                                                                            погашение платежей по которым осуществляется
+                                                                            в
+                                                                            соответствии с графиком погашения, по
+                                                                            кредиту
+                                                                            «Проверено временем» – «Кредитополучатель
+                                                                            имеет
+                                                                            право осуществить полное досрочное погашение
+                                                                            кредита с одновременной уплатой процентов за
+                                                                            фактическое время пользования кредитом в
+                                                                            период
+                                                                            действия кредитного договора. Допускается
+                                                                            досрочное погашение части кредита с уплатой
+                                                                            процентов за фактическое время пользования
+                                                                            кредитом.».
+
+                                                                            3. Предусмотренное настоящим предложением
+                                                                            дополнительное соглашение к кредитному
+                                                                            договору
+                                                                            вступает в силу с момента акцепта настоящего
+                                                                            предложения и применяется к отношениям
+                                                                            сторон с
+                                                                            01.08.2019.
+                                                                        </h5>
+                                                                        <div>
+                                                                            <label style="display: block; line-height: 40px">
+                                                                                <input required type="checkbox"
+                                                                                       class="option-input checkbox"/>
+                                                                                <p style="padding-left: 60px;margin-bottom: 40px">
+                                                                                    Я, согласен</p>
+                                                                            </label>
+                                                                        </div>
+                                                                        <input type="hidden" class="form-control"
+                                                                               th:name="${_csrf.parameterName}"
+                                                                               th:value="${_csrf.token}"/>
+                                                                        <button type="submit" class="btn btn-primary">
+                                                                            Подтвердить заявку
+                                                                        </button>
+                                                                    </form>
+                                                                </div>
+
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-default"
+                                                                            data-dismiss="modal">Закрыть
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
