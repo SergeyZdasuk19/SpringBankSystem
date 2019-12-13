@@ -41,7 +41,9 @@
                     <li class="nav-item">
                         <a href="#" data-toggle="modal" data-target="#credit">Кредит</a>
                     </li>
-                    <li class="nav-item"><a href="#features">Features</a></li>
+                    <li class="nav-item">
+                        <a href="#" data-toggle="modal" data-target="#deposit">Депозит</a>
+                    </li>
                     <li class="nav-item"><a>
                         <form action="/logout" method="post">
                             <input type="hidden" class="form-control" th:name="${_csrf.parameterName}"
@@ -805,6 +807,322 @@
                         </div>
                     </div>
 
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!--Депозит-->
+
+    <div class="modal fade bd-example-modal-lg" id="deposit" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true"></span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+
+                    <div th:each="role : ${user.roles}">
+                        <div th:switch="${role}">
+
+                            <div th:case="${T(bankService.domain.Role).ADMIN}">
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th>Имя клиента</th>
+                                        <th>Валюта</th>
+                                        <th>Номер</th>
+                                        <th>Паспорт</th>
+                                        <th>Срок</th>
+                                        <th>Сумма</th>
+                                        <th>Курс</th>
+                                        <th></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="deposit : ${deposit}">
+                                        <form th:action="'/deposit/addRequest/' + ${deposit.id}" method="post">
+                                            <div th:if="${deposit.status == 'На оформлении'}">
+                                                <td th:utext="${deposit.user.username}"></td>
+                                                <td th:utext="${deposit.currency}"></td>
+                                                <td th:utext="${deposit.number}"></td>
+                                                <td th:utext="${deposit.passportSeries}"></td>
+                                                <td th:utext="${deposit.amountYears}"></td>
+                                                <td th:utext="${deposit.wage}"></td>
+                                                <td th:utext="${deposit.course}"></td>
+                                                <td>
+                                                    <input type="hidden" class="form-control"
+                                                           th:name="${_csrf.parameterName}"
+                                                           th:value="${_csrf.token}"/>
+                                                    <button type="submit" class="btn btn-primary">
+                                                        Подтвердить заявку
+                                                    </button>
+                                                </td>
+                                            </div>
+                                        </form>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <div style="text-align: right">
+                                    <button type="button" class="btn btn-secondary"
+                                            data-dismiss="modal">Закрыть
+                                    </button>
+                                </div>
+                            </div>
+
+
+                            <div th:case="${T(bankService.domain.Role).USER}">
+
+
+                                <ul class="nav nav-tabs">
+                                    <li class="active"><a data-toggle="tab" href="#depositPanel1">Добавить депозит</a>
+                                    </li>
+                                    <li><a data-toggle="tab" href="#depositPanel2">Депозиты</a></li>
+                                </ul>
+
+
+                                <div class="tab-content">
+
+
+                                    <div id="depositPanel1" class="tab-pane fade in active">
+                                        <form action="/deposit/sendRequest" method="post">
+                                            <label>Currency</label>
+                                            <div class="form-group">
+                                                <select class="selectpicker" name="currentCurrency">
+                                                    <option th:each="cur : ${T(bankService.domain.Currency).values()}"
+                                                            th:value="${cur}" th:text="${cur}"></option>
+                                                </select>
+                                            </div>
+                                            <label>Number</label>
+                                            <div class="form-group">
+                                                <input type="number" class="form-control" placeholder="14577895"
+                                                       aria-label="Recipient's username" aria-describedby="basic-addon2"
+                                                       name="number">
+                                            </div>
+                                            <label>Passport</label>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" placeholder="MP14569"
+                                                       aria-label="Recipient's username" aria-describedby="basic-addon2"
+                                                       name="passportSeries">
+                                            </div>
+                                            <label>Years</label>
+                                            <div class="form-group">
+                                                <input type="number" class="form-control" placeholder="2"
+                                                       aria-label="Recipient's username" aria-describedby="basic-addon2"
+                                                       name="amountYears">
+                                            </div>
+                                            <label>Wage</label>
+                                            <div class="form-group">
+                                                <input type="number" class="form-control" placeholder="100"
+                                                       aria-label="Recipient's username" aria-describedby="basic-addon2"
+                                                       name="wage">
+                                            </div>
+                                            <label>Course, %</label>
+                                            <div class="form-group">
+                                                <input type="number" class="form-control" readonly
+                                                       aria-label="Recipient's username" aria-describedby="basic-addon2"
+                                                       name="course" value="12"/>
+                                            </div>
+                                            <input type="hidden" class="form-control"
+                                                   th:name="${_csrf.parameterName}"
+                                                   th:value="${_csrf.token}"/>
+                                            <button type="submit" class="btn btn-primary">Отправить заявку</button>
+                                            <div style="text-align: right">
+                                                <button type="button" class="btn btn-secondary"
+                                                        data-dismiss="modal">Закрыть
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+
+
+                                    <div style="min-height: 400px" id="depositPanel2" class="tab-pane fade">
+                                        <label>
+                                            <table class="table">
+                                                <thead>
+                                                <tr>
+                                                    <th>Имя клиента</th>
+                                                    <th>Валюта</th>
+                                                    <th>Номер</th>
+                                                    <th>Паспорт</th>
+                                                    <th>Срок</th>
+                                                    <th>Сумма</th>
+                                                    <th>Курс</th>
+                                                    <th>Дата</th>
+                                                    <th>Статус</th>
+                                                    <th></th>
+                                                    <th></th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr th:each="deposit : ${deposit}">
+                                                    <td th:utext="${deposit.user.username}"></td>
+                                                    <td th:utext="${deposit.currency}"></td>
+                                                    <td th:utext="${deposit.number}"></td>
+                                                    <td th:utext="${deposit.passportSeries}"></td>
+                                                    <td th:utext="${deposit.amountYears}"></td>
+                                                    <td th:utext="${deposit.wage}"></td>
+                                                    <td th:utext="${deposit.course}"></td>
+                                                    <td th:utext="${deposit.startDate}"></td>
+                                                    <td th:if="${deposit.status}=='На оформлении'">На оформлении</td>
+                                                    <td th:if="${deposit.status}=='Активный'">Активный</td>
+                                                    <td th:if="${deposit.status}=='Активный'">
+                                                        <form th:action="'/creditCard/addAmountOnDeposit/' + ${deposit.id}"
+                                                              method="post">
+                                                            <button data-toggle="modal"
+                                                                    th:attr="data-target='#modal-addAmountOnDepositWithCard'+${deposit.id}"
+                                                                    type="button" class="btn btn-success">
+                                                                Пополнить баланс с карты
+                                                            </button>
+                                                        </form>
+                                                    </td>
+                                                    <td th:if="${deposit.status}=='Активный' and ${deposit.endDate==deposit.nowDate}">
+                                                        <button data-toggle="modal"
+                                                                th:attr="data-target='#modal-addAmountOnDepositWithCard'+${deposit.id}"
+                                                                type="button" class="btn btn-success">
+                                                            Пополнить баланс с карты
+                                                        </button>
+                                                    </td>
+                                                    <td th:if="${deposit.status}=='Подтвердить заявку'">
+                                                        <button data-toggle="modal"
+                                                                th:attr="data-target='#modal-acceptRequestDeposit'+${deposit.id}"
+                                                                type="button" class="btn btn-success">
+                                                            Подтвердить заявку
+                                                        </button>
+                                                    </td>
+
+
+                                                    <!-- Модальное окно Пополнить баланс на расчетный счет -->
+                                                    <div class="modal fade"
+                                                         th:attr="id='modal-addAmountOnDepositWithCard'+${deposit.id}"
+                                                         tabindex="-1" role="dialog"
+                                                         aria-labelledby="modalLabel2">
+                                                        <div class="modal-dialog" role="document">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <button type="button" class="close"
+                                                                            data-dismiss="modal" aria-label="Закрыть">
+                                                                        <span aria-hidden="true">×</span>
+                                                                    </button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <form th:action="'/creditCard/addAmountOnDeposit/'+${deposit.id}"
+                                                                          method="post">
+
+                                                                        <label>Сумма</label>
+                                                                        <div class="form-group">
+                                                                            <input type="number" class="form-control"
+                                                                                   aria-label="Recipient's username"
+                                                                                   aria-describedby="basic-addon2"
+                                                                                   name="amount" required>
+                                                                        </div>
+                                                                        <label>Номер карты</label>
+                                                                        <div class="form-group">
+                                                                            <input type="text" class="form-control"
+                                                                                   aria-label="Recipient's username"
+                                                                                   aria-describedby="basic-addon2"
+                                                                                   name="number" required
+                                                                                   pattern="[0-9]{4}\s[0-9]{4}\s[0-9]{4}\s[0-9]{4}">
+                                                                        </div>
+                                                                        <label>CVC</label>
+                                                                        <div class="form-group">
+                                                                            <input type="number" class="form-control"
+                                                                                   aria-label="Recipient's username"
+                                                                                   aria-describedby="basic-addon2"
+                                                                                   name="cvc" required>
+                                                                        </div>
+                                                                        <input type="hidden" class="form-control"
+                                                                               th:name="${_csrf.parameterName}"
+                                                                               th:value="${_csrf.token}"/>
+                                                                        <button type="submit" class="btn btn-primary">
+                                                                            Пополнить баланс счета
+                                                                        </button>
+                                                                    </form>
+                                                                </div>
+
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-default"
+                                                                            data-dismiss="modal">Закрыть
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
+                                                    <!-- Модальное окно Подтвердить заявку на получение расчетного счета -->
+                                                    <div class="modal fade"
+                                                         th:attr="id='modal-acceptRequestDeposit'+${deposit.id}"
+                                                         tabindex="-1" role="dialog"
+                                                         aria-labelledby="modalLabel2">
+                                                        <div class="modal-dialog" role="document">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <button type="button" class="close"
+                                                                            data-dismiss="modal" aria-label="Закрыть">
+                                                                        <span aria-hidden="true">×</span>
+                                                                    </button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <form th:action="'/deposit/activate/'+${deposit.id}"
+                                                                          method="post">
+                                                                        <h5>Основное назначение — накопление денег
+                                                                            держателя депозита. Он открывается на
+                                                                            определенный срок, а на находящуюся на нем
+                                                                            сумму начисляются проценты. В отличие от
+                                                                            текущего, депозитный нельзя использовать для
+                                                                            расчетов, переводов денег, совершения
+                                                                            покупок и других целей. Такое ограничение по
+                                                                            функционалу связано с тем, чтобы банк смог
+                                                                            распоряжаться доверенными ему деньгами в
+                                                                            указанный в договоре срок. Чаще всего,
+                                                                            клиент не имеет права забирать свои средства
+                                                                            с этого счета раньше оговоренного срока.
+                                                                            Именно за эти удобства для банка вкладчик и
+                                                                            получает свою прибыль.</h5>
+                                                                        <div>
+                                                                            <label style="display: block; line-height: 40px">
+                                                                                <input required type="checkbox"
+                                                                                       class="option-input checkbox"/>
+                                                                                <p style="padding-left: 60px;margin-bottom: 40px">
+                                                                                    Я, согласен</p>
+                                                                            </label>
+                                                                        </div>
+                                                                        <input type="hidden" class="form-control"
+                                                                               th:name="${_csrf.parameterName}"
+                                                                               th:value="${_csrf.token}"/>
+                                                                        <button type="submit" class="btn btn-primary">
+                                                                            Подтвердить заявку
+                                                                        </button>
+                                                                    </form>
+                                                                </div>
+
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-default"
+                                                                            data-dismiss="modal">Закрыть
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </label>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

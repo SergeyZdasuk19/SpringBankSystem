@@ -3,6 +3,7 @@ package bankService.controller;
 import bankService.domain.Role;
 import bankService.domain.User;
 import bankService.repos.CreditRepo;
+import bankService.repos.DepositRepo;
 import bankService.repos.PaymentRepo;
 import bankService.repos.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,8 @@ public class MainController {
     private PaymentRepo paymentRepo;
     @Autowired
     private CreditRepo creditRepo;
+    @Autowired
+    private DepositRepo depositRepo;
 
     @GetMapping("/")
     public String greeting() {
@@ -32,14 +35,14 @@ public class MainController {
         for (Role role : user.getRoles()) {
             switch (role) {
                 case USER:
-                    model.addAttribute("user", user);
                     model.addAttribute("paymentAccounts", paymentRepo.findByUserId(user.getId()));
                     model.addAttribute("credit", creditRepo.findByUserId(user.getId()));
+                    model.addAttribute("deposit", depositRepo.findByUserId(user.getId()));
                     break;
                 case ADMIN:
-                    model.addAttribute("user", user);
                     model.addAttribute("paymentAccounts", paymentRepo.findAll());
                     model.addAttribute("credit", creditRepo.findAll());
+                    model.addAttribute("deposit", depositRepo.findAll());
                     break;
             }
         }
